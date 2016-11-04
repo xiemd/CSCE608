@@ -16,8 +16,6 @@ import java.util.Arrays;
 public class Parser2{
 	private final String error1 = "Syntax Error!";
 	private final String error2 = "Create Error!";
-	private static final Set<String> statements =
-        new HashSet<String>(Arrays.asList("create","drop","select","delete","insert","source"));
 	public String sentence;
 	public ArrayList<String> words;
 	public ArrayList<String> fields;

@@ -42,14 +42,16 @@ public class PhiQuery {
 			return insertQuery();
 		if ("select".equalsIgnoreCase(parse.words.get(0)))
 			return selectQuery();
+		if ("drop".equalsIgnoreCase(parse.words.get(0)))
+			return dropQuery();
+		if ("delete".equalsIgnoreCase(parse.words.get(0)))
+			return deleteQuery();
 		return true;
 	}
 	
 	public boolean createQuery() {
 		if (parse.words.size() < 3)
 			Parser2.error("Create Size is Wrong!");
-		if (!"create".equalsIgnoreCase(parse.words.get(0)))
-			Parser2.error("Create Keyword is Wrong!");
 		if (!"table".equalsIgnoreCase(parse.words.get(1)))
 			Parser2.error("Table Keyword be understood!");
 		if ("".equals(parse.words.get(2)))
@@ -63,10 +65,10 @@ public class PhiQuery {
 	    ArrayList<String> field_names= parse.fields;
 	    ArrayList<FieldType> field_types= parse.fieldtypes;
 	    Schema schema=new Schema(field_names,field_types);
-	    field_names=schema.getFieldNames();
+	    
 	    System.out.print(field_names.toString()+"\n");
 	    System.out.print("The schema has field types: " + "\n");
-	    field_types=schema.getFieldTypes();
+
 	    System.out.print(field_types.toString()+"\n");
 	    System.out.print("\n");
 	    
@@ -80,8 +82,6 @@ public class PhiQuery {
 		//error checking
 		if (parse.words.size() < 3)
 			Parser2.error("Insert Size is Wrong!");
-		if (!"insert".equalsIgnoreCase(parse.words.get(0)))
-			Parser2.error("Insert 'into' Keyword is Wrong!");
 		if (!"into".equalsIgnoreCase(parse.words.get(1)))
 			Parser2.error("Table Keyword can not be understood!");
 		if ("".equals(parse.words.get(2)))
@@ -169,6 +169,25 @@ public class PhiQuery {
 		
 		return true;
 	}
+	public boolean dropQuery(){
+		if (parse.words.size() < 3)
+			Parser2.error("drop size is wrong");
+		if (!"table".equalsIgnoreCase(parse.words.get(1)))
+			Parser2.error("No table keyword!");
+		if (parse.words.get(2).equalsIgnoreCase(""))
+			Parser2.error("No table name!");
+		
+		String relation_name = parse.words.get(2).toLowerCase();
+		schema_manager.deleteRelation(relation_name);
+		
+		return true;
+	}
+	
+	public boolean deleteQuery(){
+		
+		
+		return true;
+	}
 	
 	  private static void appendTupleToRelation(Relation relation_reference, MainMemory mem, int memory_block_index, Tuple tuple) {
 		    Block block_reference;
@@ -229,6 +248,10 @@ public class PhiQuery {
 		String insert5 = "INSERT INTO course (sid, homework, project, exam, grade) VALUES (17, 100, 100, 100, \"A\")";
 		String select = "SELECT * FROM course where course.grade = \"A\"";
 		String filename = "test.txt";
+		String delete = "DELETE FROM course WHERE grade = 'E'";
+		
+		String drop = "DROP TABLE course";
+		
 		PhiQuery query = new PhiQuery();
 		//parseFile(filename);
 		query.execute(create);
@@ -238,7 +261,12 @@ public class PhiQuery {
 		query.execute(insert3);
 		query.execute(insert4);
 		query.execute(insert5);
+		
+		query.execute(delete);
 		query.execute(select);
+		query.execute(drop);
+		
+		
 	}
 
 }
