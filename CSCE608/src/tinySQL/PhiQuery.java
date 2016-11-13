@@ -199,6 +199,12 @@ public class PhiQuery {
 	}
 	
 	public boolean deleteQuery(){
+		//error checking
+		if (parse.words.size() < 1)
+			Parser2.error("delete size is wrong!");
+		if (parse.delete == null)
+			Parser2.error("delete Node Can't be NULL!");
+		
 		
 		
 		return true;
